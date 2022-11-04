@@ -2,17 +2,17 @@ import React from "react";
 
 import "./scss/app.scss";
 
-import { Footer, Header, ButtonUp, Table } from "./components";
+import { Footer, Header, ButtonUp, Conventor } from "./components";
 
 function App() {
   return (
     <div>
       <Header />
 
-      <Table />
+      <Conventor />
 
+      {/* <Table /> */}
       <ButtonUp />
-
       <Footer />
     </div>
   );

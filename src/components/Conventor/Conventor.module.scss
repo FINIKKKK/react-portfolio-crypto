@@ -1,0 +1,85 @@
+@import '../../scss/variables';
+
+.conventor {
+  margin-bottom: 120px;
+  * {
+    color: #fff !important;
+  }
+}
+.title {
+  margin-bottom: 34px !important;
+  font-weight: 700 !important;
+}
+.flex {
+  margin-bottom: 38px !important;
+}
+.input {
+  background-color: $main;
+  border-radius: 5px;
+  margin-bottom: 23px !important;
+  font-size: 18px;
+  line-height: 24px;
+  * {
+    border: none !important;
+    outline: none !important;
+  }
+  label {
+    color: #fff;
+    font-weight: 600;
+    font-family: $font;
+  }
+}
+.select {
+  background-color: $main;
+  border-radius: 5px;
+  label {
+    font-weight: 700;
+  }
+  * {
+    border: none !important;
+    outline: none !important;
+  }
+}
+.btn {
+  background-color: $main !important;
+  border-radius: 5px !important;
+  width: 68px;
+  height: 100%;
+  margin: 0 22px !important;
+  transition: 0.2s;
+  svg {
+    width: 31px;
+  }
+  &:hover {
+    background-color: $red !important;
+  }
+}
+.result {
+  font-weight: 700 !important;
+}
+:global {
+  .MuiPaper-elevation {
+    background-color: $main !important;
+    color: #fff !important;
+  }
+  .MuiListSubheader-root {
+    background-color: transparent !important;
+    border-bottom: 1px solid rgba(#fff, 0.1) !important;
+    margin: 10px 15px !important;
+  }
+  .MuiMenuItem-root:hover {
+    background-color: rgba(0, 0, 0, 0.12) !important;
+  }
+  .MuiInputBase-root {
+    transition: 0.2s !important;
+    &::before {
+      border-bottom: 1px solid rgba(0, 0, 0, 0) !important;
+    }
+  }
+  .MuiInputBase-root:hover {
+    background-color: $main2 !important;
+    &::before {
+      border-bottom: 1px solid rgba(0, 0, 0, 0) !important;
+    }
+  }
+}
