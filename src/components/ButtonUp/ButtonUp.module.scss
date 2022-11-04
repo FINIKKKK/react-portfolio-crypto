@@ -1,0 +1,25 @@
+@import '../../scss/variables';
+
+.btn {
+  background-color: $main;
+  padding: 12px 13px;
+  border-radius: 5px;
+  position: fixed;
+  right: 30px;
+  bottom: 20px;
+  transition: 0.2s;
+  cursor: pointer;
+  transform: translateX(200%);
+  svg {
+    width: 24px;
+  }
+  &.active {
+    transform: translateX(0%);
+  }
+  &.upper {
+    transform: translateY(-40px);
+  }
+  &:hover {
+    background-color: $red;
+  }
+}

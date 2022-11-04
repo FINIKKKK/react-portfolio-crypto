@@ -1,0 +1,73 @@
+// ---- Global-Tags ----
+html {
+  overflow-x: hidden;
+  box-sizing: border-box;
+  &.fixed {
+    overflow-y: hidden;
+  }
+}
+*,
+*::after,
+*::before {
+  box-sizing: inherit;
+}
+body {
+  position: relative;
+  overflow-x: hidden;
+  min-width: 320px;
+  font-family: $font;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18px;
+  color: #fff;
+  background-color: $bg;
+}
+a {
+  color: #fff;
+}
+
+// ---- Global-Classes ----
+.container {
+  margin: 0 auto;
+  padding: 0 15px;
+  max-width: 1134px;
+}
+
+.title {
+}
+
+.btn {
+  padding: 12px 24px;
+  // font-weight: 700;
+  font-size: 20px;
+  line-height: 32px;
+  background: $main;
+  color: #000;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  border-radius: 30px;
+  cursor: pointer;
+  svg {
+    transition: 0.3s !important;
+  }
+  &:hover {
+    box-shadow: 0px 0px 15px rgba($main, 0.7);
+  }
+}
+
+// ScrollBar
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba($red, 1);
+}
+::-webkit-scrollbar-track {
+  background-color: $bg;
+}
+
+// Selection
+::selection {
+  background: rgba($red, 0.6) !important;
+}
