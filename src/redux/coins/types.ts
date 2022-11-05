@@ -5,6 +5,7 @@ export type TCoin = {
   name: string;
   price: string;
   volume24hour: string;
+  marketCap: string;
   changeHour: string;
   change24hour: string;
 };

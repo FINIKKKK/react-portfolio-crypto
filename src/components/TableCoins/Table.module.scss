@@ -11,22 +11,18 @@
     color: #fff !important;
   }
   th {
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 19px;
     border: none;
     padding: 0 17px 21px;
-    border-radius: 11px !important;
   }
   td {
     border: none;
-    margin-bottom: 16px !important;
   }
   tr {
   }
 }
 
-.body {
+.head {
+  th {
+    font-weight: 400;
+  }
 }
-
-

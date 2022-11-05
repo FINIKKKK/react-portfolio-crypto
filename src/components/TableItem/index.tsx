@@ -1,10 +1,11 @@
 import React from "react";
+import classNames from "classnames";
 
 import { TableRow, TableCell } from "@mui/material";
 
-import ss from "./TableItem.module.scss";
 import { TCoin } from "../../redux/coins/types";
-import classNames from "classnames";
+
+import ss from "./TableItem.module.scss";
 
 type TableItemProps = {};
 
@@ -15,6 +16,7 @@ export const TableItem: React.FC<TCoin> = ({
   name,
   price,
   volume24hour,
+  marketCap,
   changeHour,
   change24hour,
 }) => {
@@ -29,6 +31,7 @@ export const TableItem: React.FC<TCoin> = ({
       </TableCell>
       <TableCell align="right">{price}</TableCell>
       <TableCell align="right">{volume24hour}</TableCell>
+      <TableCell align="right">{marketCap}</TableCell>
       <TableCell
         className={classNames({
           [ss.red]: Number(changeHour) < 0,
@@ -47,7 +50,6 @@ export const TableItem: React.FC<TCoin> = ({
       >
         {`${Number(change24hour) > 0 ? "+" : ""} ${change24hour} `}%
       </TableCell>
-      <TableCell align="right">volume24hour</TableCell>
     </TableRow>
   );
 };

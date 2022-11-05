@@ -36,7 +36,7 @@ export const Conventor: React.FC<ConventorProps> = () => {
           fullWidth
         />
         <Grid className={ss.flex} container>
-          <Grid xs={5.36} md={5.36}>
+          <Grid xs={5.36} item>
             <FormControl className={ss.select} variant="filled" fullWidth>
               <Select
                 labelId="demo-simple-select-label"
@@ -56,7 +56,7 @@ export const Conventor: React.FC<ConventorProps> = () => {
             </FormControl>
           </Grid>
 
-          <Grid xs={1.23} md={1.23}>
+          <Grid xs={1.23} item>
             <IconButton className={ss.btn} aria-label="delete">
               <svg
                 width="32"
@@ -77,7 +77,7 @@ export const Conventor: React.FC<ConventorProps> = () => {
             </IconButton>
           </Grid>
 
-          <Grid xs={5.36} md={5.36}>
+          <Grid xs={5.36} item>
             <FormControl className={ss.select} variant="filled" fullWidth>
               <Select
                 labelId="demo-simple-select-label"

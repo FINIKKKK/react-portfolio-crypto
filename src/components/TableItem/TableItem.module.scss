@@ -6,8 +6,8 @@
     border-style: solid none;
     background-color: $main2;
     font-weight: 700;
-    font-size: 18px;
-    line-height: 24px;
+    font-size: 16px;
+    line-height: 20px;
   }
   td:first-child {
     border-left-style: solid;
@@ -25,21 +25,21 @@
   display: flex !important;
   align-items: center;
   img {
-    width: 47px;
-    height: 47px;
+    width: 43px;
+    height: 43px;
     margin-right: 17px;
   }
 }
 .info {
   .fullName {
     font-weight: 600;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 21px;
     margin-bottom: 3px;
   }
   .name {
     font-weight: 700;
-    font-size: 11px;
+    font-size: 10px;
     line-height: 15px;
   }
 }

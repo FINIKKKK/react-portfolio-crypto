@@ -18,6 +18,7 @@ export const fetchCoins = createAsyncThunk<TCoin[]>(
         name: obj.CoinInfo.Name,
         price: obj.DISPLAY.USD.PRICE,
         volume24hour: obj.DISPLAY.USD.VOLUME24HOUR,
+        marketCap: obj.DISPLAY.USD.MKTCAP,
         changeHour: obj.DISPLAY.USD.CHANGEPCTHOUR,
         change24hour: obj.DISPLAY.USD.CHANGEPCT24HOUR,
       };
