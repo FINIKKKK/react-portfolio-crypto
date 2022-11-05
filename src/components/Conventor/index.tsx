@@ -4,7 +4,6 @@ import {
   TextField,
   Typography,
   FormControl,
-  InputLabel,
   Select,
   MenuItem,
   IconButton,
@@ -13,10 +12,15 @@ import {
 } from "@mui/material";
 
 import ss from "./Conventor.module.scss";
+import { coinsSliceSelector } from "../../redux/coins/selectors";
+import { TCoin } from "../../redux/coins/types";
+import { useSelector } from "react-redux";
 
 type ConventorProps = {};
 
 export const Conventor: React.FC<ConventorProps> = () => {
+  const { items } = useSelector(coinsSliceSelector);
+
   return (
     <div className={ss.conventor}>
       <div className="container">
@@ -40,8 +44,11 @@ export const Conventor: React.FC<ConventorProps> = () => {
                 value="Option 1"
                 className={ss.list}
               >
-                <MenuItem value={1}>Option 1</MenuItem>
-                <MenuItem value={2}>Option 2</MenuItem>
+                {items.map((obj: TCoin) => (
+                  <MenuItem key={obj.id} value={obj.name}>
+                    {`${obj.fullName} (${obj.name})`}
+                  </MenuItem>
+                ))}
                 <ListSubheader></ListSubheader>
                 <MenuItem value={3}>Option 3</MenuItem>
                 <MenuItem value={4}>Option 4</MenuItem>

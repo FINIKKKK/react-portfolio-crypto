@@ -1,0 +1,52 @@
+@import '../../scss/variables';
+
+.item {
+  td {
+    border: solid 1px $main2;
+    border-style: solid none;
+    background-color: $main2;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 24px;
+  }
+  td:first-child {
+    border-left-style: solid;
+    border-top-left-radius: 11px;
+    border-bottom-left-radius: 11px;
+  }
+  td:last-child {
+    border-right-style: solid;
+    border-bottom-right-radius: 11px;
+    border-top-right-radius: 11px;
+  }
+}
+
+.row {
+  display: flex !important;
+  align-items: center;
+  img {
+    width: 47px;
+    height: 47px;
+    margin-right: 17px;
+  }
+}
+.info {
+  .fullName {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 21px;
+    margin-bottom: 3px;
+  }
+  .name {
+    font-weight: 700;
+    font-size: 11px;
+    line-height: 15px;
+  }
+}
+
+.red {
+  color: $red !important;
+}
+.green {
+  color: $green !important;
+}

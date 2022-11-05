@@ -1,0 +1,32 @@
+@import '../../scss/variables';
+
+.table {
+  margin-bottom: 150px;
+  table {
+    border-collapse: separate !important;
+    border-spacing: 0px 16px !important;
+    border-radius: 10px;
+  }
+  * {
+    color: #fff !important;
+  }
+  th {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 19px;
+    border: none;
+    padding: 0 17px 21px;
+    border-radius: 11px !important;
+  }
+  td {
+    border: none;
+    margin-bottom: 16px !important;
+  }
+  tr {
+  }
+}
+
+.body {
+}
+
+

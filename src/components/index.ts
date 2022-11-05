@@ -3,4 +3,5 @@ export * from './Footer';
 export * from './ButtonUp';
 
 export * from './Conventor';
-export * from './Table';
+export * from './TableCoins';
+export * from './TableItem';

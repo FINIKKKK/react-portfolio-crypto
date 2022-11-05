@@ -2,7 +2,7 @@ import React from "react";
 
 import "./scss/app.scss";
 
-import { Footer, Header, ButtonUp, Conventor } from "./components";
+import { Footer, Header, ButtonUp, Conventor, TableCoins } from "./components";
 
 function App() {
   return (
@@ -11,7 +11,8 @@ function App() {
 
       <Conventor />
 
-      {/* <Table /> */}
+      <TableCoins />
+
       <ButtonUp />
       <Footer />
     </div>
