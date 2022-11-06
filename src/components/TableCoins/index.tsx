@@ -40,49 +40,14 @@ export const TableCoins: React.FC<TableProps> = () => {
 
   const [currentPage, setCurrentPage] = React.useState(0);
   const [isUpdate, setIsUpdate] = React.useState(false);
-  const [currency, setCurrency] = React.useState(currencies[0]);
-
-  // const [coins, setCoins] = React.useState([]);
-  // const [fetching, setFetching] = React.useState(true);
-
-  console.log("currentPage", currentPage);
-  console.log("isFetching", isFetching);
-  console.log("itemsLenght", coins.length);
+  const [currency, setCurrency] = React.useState(currencies[0].name);
 
   React.useEffect(() => {
     try {
       if (isFetching) {
-        console.log("isFetching");
         dispatch(fetchCoins({ currentPage, currency }));
         setCurrentPage((prevState) => prevState + 1);
-        // axios
-        //   .get(
-        //     `https://min-api.cryptocompare.com/data/top/totalvolfull?limit=10&page=${currentPage}&tsym=USD`
-        //   )
-        //   .then(({ data }) => {
-        //     const items: TCoin[] = data.Data.map((obj: any) => {
-        //       return {
-        //         id: obj.CoinInfo.id,
-        //         img: `https://www.cryptocompare.com${obj.CoinInfo.ImageUrl}`,
-        //         fullName: obj.CoinInfo.FullName,
-        //         name: obj.CoinInfo.Name,
-        //         price: obj.DISPLAY ? obj.DISPLAY.USD.PRICE : "??",
-        //         volume24hour: obj.DISPLAY ? obj.DISPLAY.USD.VOLUME24HOUR : "??",
-        //         marketCap: obj.DISPLAY ? obj.DISPLAY.USD.MKTCAP : "??",
-        //         changeHour: obj.DISPLAY ? obj.DISPLAY.USD.CHANGEPCTHOUR : "??",
-        //         change24hour: obj.DISPLAY
-        //           ? obj.DISPLAY.USD.CHANGEPCT24HOUR
-        //           : "??",
-        //       };
-        //     });
-        //     console.log('конец');
-        //     // @ts-ignore
-        //     setCoins([...coins, ...items]);
-        //     setCurrentPage((prevState) => prevState + 1);
-        //   })
-        //   .finally(() => setFetching(false));
       } else if (isUpdate) {
-        console.log("isUpdate");
         dispatch(clearCoins());
         setCurrentPage(1);
         dispatch(fetchCoins({ currentPage: 0, currency }));
@@ -102,8 +67,6 @@ export const TableCoins: React.FC<TableProps> = () => {
         100 &&
       coins.length !== 100
     ) {
-      console.log("gg");
-      // setFetching(true)
       dispatch(setFetching(true));
     }
   };
@@ -128,11 +91,11 @@ export const TableCoins: React.FC<TableProps> = () => {
             className={ss.list}
             id="demo-simple-select"
             value={currency}
-            onChange={(e) => selectCurrency(e.target.value)}
+            onChange={(e: any) => selectCurrency(e.target.value)}
           >
-            {currencies.map((label, index) => (
-              <MenuItem key={index} value={label}>
-                {label}
+            {currencies.map((obj, index) => (
+              <MenuItem key={index} value={obj.name}>
+                {obj.name}
               </MenuItem>
             ))}
           </Select>

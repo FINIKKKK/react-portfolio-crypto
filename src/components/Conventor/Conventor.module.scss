@@ -80,3 +80,12 @@
     }
   }
 }
+.select {
+  :global {
+    .MuiSelect-select {
+      font-weight: 600;
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+  }
+}

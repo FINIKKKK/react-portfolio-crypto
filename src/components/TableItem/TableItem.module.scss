@@ -1,6 +1,12 @@
 @import '../../scss/variables';
 
 .item {
+  cursor: pointer;
+  &:hover {
+    td {
+      background-color: $main;
+    }
+  }
   td {
     border: solid 1px $main2;
     border-style: solid none;

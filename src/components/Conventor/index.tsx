@@ -13,13 +13,26 @@ import {
 
 import ss from "./Conventor.module.scss";
 import { coinsSliceSelector } from "../../redux/coins/selectors";
-import { TCoin } from "../../redux/coins/types";
+import { currencies, TCoin } from "../../redux/coins/types";
 import { useSelector } from "react-redux";
 
 type ConventorProps = {};
 
 export const Conventor: React.FC<ConventorProps> = () => {
   const { items } = useSelector(coinsSliceSelector);
+
+  const [fromCoin, setFromCoin] = React.useState(
+    items[0] ? `${items[0].fullName} (${items[0].name})` : ""
+  );
+  const [toCoin, setToCoin] = React.useState(
+    items[0] ? `${items[0].fullName} (${items[0].name})` : ""
+  );
+  const [value, setValue] = React.useState(1);
+
+  const reverseSelects = () => {
+    setFromCoin(toCoin);
+    setToCoin(fromCoin);
+  };
 
   return (
     <div className={ss.conventor}>
@@ -29,7 +42,10 @@ export const Conventor: React.FC<ConventorProps> = () => {
         </Typography>
 
         <TextField
+          value={value}
+          onChange={(e: any) => setValue(e.target.value)}
           className={ss.input}
+          type="number"
           id="outlined-basic"
           placeholder="Введите сумму..."
           variant="outlined"
@@ -42,21 +58,33 @@ export const Conventor: React.FC<ConventorProps> = () => {
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 className={ss.list}
+                value={fromCoin}
+                onChange={(e: any) => setFromCoin(e.target.value)}
               >
-                {items.map((obj: TCoin) => (
-                  <MenuItem key={`${obj.name}_${obj.id}`} value={obj.name}>
+                {currencies.map((obj, index) => (
+                  <MenuItem key={index} value={`${obj.fullName} (${obj.name})`}>
                     {`${obj.fullName} (${obj.name})`}
                   </MenuItem>
                 ))}
                 <ListSubheader></ListSubheader>
-                <MenuItem value={3}>Option 3</MenuItem>
-                <MenuItem value={4}>Option 4</MenuItem>
+                {items.map((obj: TCoin) => (
+                  <MenuItem
+                    key={`${obj.name}_${obj.id}`}
+                    value={`${obj.fullName} (${obj.name})`}
+                  >
+                    {`${obj.fullName} (${obj.name})`}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Grid>
 
           <Grid xs={1.23} item>
-            <IconButton className={ss.btn} aria-label="delete">
+            <IconButton
+              onClick={reverseSelects}
+              className={ss.btn}
+              aria-label="delete"
+            >
               <svg
                 width="32"
                 height="27"
@@ -82,19 +110,29 @@ export const Conventor: React.FC<ConventorProps> = () => {
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 className={ss.list}
+                value={toCoin}
+                onChange={(e: any) => setToCoin(e.target.value)}
               >
-                <MenuItem value={1}>Option 1</MenuItem>
-                <MenuItem value={2}>Option 2</MenuItem>
+                {currencies.map((obj, index) => (
+                  <MenuItem key={index} value={`${obj.fullName} (${obj.name})`}>
+                    {`${obj.fullName} (${obj.name})`}
+                  </MenuItem>
+                ))}
                 <ListSubheader></ListSubheader>
-                <MenuItem value={3}>Option 3</MenuItem>
-                <MenuItem value={4}>Option 4</MenuItem>
+                {items.map((obj: TCoin) => (
+                  <MenuItem
+                    key={`${obj.name}_${obj.id}`}
+                    value={`${obj.fullName} (${obj.name})`}
+                  >
+                    {`${obj.fullName} (${obj.name})`}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Grid>
         </Grid>
-
         <Typography className={ss.result} align="center" variant="h5">
-          1 Bitcoin (BTC) = 20,272.77 United States Dollar (USD)
+          {value} {fromCoin} = 20,272.77 {toCoin}
         </Typography>
       </div>
     </div>

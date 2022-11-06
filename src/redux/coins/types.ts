@@ -27,4 +27,8 @@ export enum CoinStatus {
   ERROR = "error",
 }
 
-export const currencies = ["USD", "RUB", "EUR"];
+export const currencies = [
+  { name: "USD", fullName: "United States Dollar" },
+  { name: "RUB", fullName: "Российский рубль" },
+  { name: "EUR", fullName: "Euro" },
+];
