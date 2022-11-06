@@ -10,9 +10,15 @@ export type TCoin = {
   change24hour: string;
 };
 
+export type TFetchParams = {
+  currentPage: number;
+  currency: string;
+};
+
 export interface TCoinsSlice {
   status: CoinStatus;
   items: TCoin[];
+  isFetching: boolean;
 }
 
 export enum CoinStatus {
@@ -20,3 +26,5 @@ export enum CoinStatus {
   SUCCESS = "success",
   ERROR = "error",
 }
+
+export const currencies = ["USD", "RUB", "EUR"];

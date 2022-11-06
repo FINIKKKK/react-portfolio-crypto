@@ -41,11 +41,10 @@ export const Conventor: React.FC<ConventorProps> = () => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value="Option 1"
                 className={ss.list}
               >
                 {items.map((obj: TCoin) => (
-                  <MenuItem key={obj.id} value={obj.name}>
+                  <MenuItem key={`${obj.name}_${obj.id}`} value={obj.name}>
                     {`${obj.fullName} (${obj.name})`}
                   </MenuItem>
                 ))}
@@ -82,7 +81,6 @@ export const Conventor: React.FC<ConventorProps> = () => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                value="Option 1"
                 className={ss.list}
               >
                 <MenuItem value={1}>Option 1</MenuItem>

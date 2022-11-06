@@ -8,14 +8,18 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  Select,
+  FormControl,
+  MenuItem,
 } from "@mui/material";
 
 import { coinsSliceSelector } from "../../redux/coins/selectors";
+import { setFetching } from "../../redux/coins/slice";
 
 import ss from "./Table.module.scss";
-import { TCoin } from "../../redux/coins/types";
+import { currencies, TCoin } from "../../redux/coins/types";
 import { TableItem } from "../TableItem";
-import { fetchCoins } from "../../redux/coins/slice";
+import { fetchCoins, clearCoins } from "../../redux/coins/slice";
 import { useAppDispatch } from "../../redux/store";
 import axios from "axios";
 
@@ -32,45 +36,64 @@ const tableLabels = [
 
 export const TableCoins: React.FC<TableProps> = () => {
   const dispatch = useAppDispatch();
-  // const { items } = useSelector(coinsSliceSelector);
+  const { items: coins, isFetching } = useSelector(coinsSliceSelector);
 
-  const [fetching, setFetching] = React.useState(true);
   const [currentPage, setCurrentPage] = React.useState(0);
-  const [coins, setCoins] = React.useState([]);
+  const [isUpdate, setIsUpdate] = React.useState(false);
+  const [currency, setCurrency] = React.useState(currencies[0]);
+
+  // const [coins, setCoins] = React.useState([]);
+  // const [fetching, setFetching] = React.useState(true);
+
+  console.log("currentPage", currentPage);
+  console.log("isFetching", isFetching);
+  console.log("itemsLenght", coins.length);
 
   React.useEffect(() => {
     try {
-      if (fetching) {
-        axios
-          .get(
-            `https://min-api.cryptocompare.com/data/top/totalvolfull?limit=10&page=${currentPage}&tsym=USD`
-          )
-          .then(({ data }) => {
-            const items: TCoin[] = data.Data.map((obj: any) => {
-              return {
-                id: obj.CoinInfo.id,
-                img: `https://www.cryptocompare.com${obj.CoinInfo.ImageUrl}`,
-                fullName: obj.CoinInfo.FullName,
-                name: obj.CoinInfo.Name,
-                price: obj.DISPLAY.USD.PRICE,
-                volume24hour: obj.DISPLAY.USD.VOLUME24HOUR,
-                marketCap: obj.DISPLAY.USD.MKTCAP,
-                changeHour: obj.DISPLAY.USD.CHANGEPCTHOUR,
-                change24hour: obj.DISPLAY.USD.CHANGEPCT24HOUR,
-              };
-            });
-            // @ts-ignore
-            setCoins([...coins, ...items]);
-            setCurrentPage((prevState) => prevState + 1);
-          })
-          .finally(() => setFetching(false));
+      if (isFetching) {
+        console.log("isFetching");
+        dispatch(fetchCoins({ currentPage, currency }));
+        setCurrentPage((prevState) => prevState + 1);
+        // axios
+        //   .get(
+        //     `https://min-api.cryptocompare.com/data/top/totalvolfull?limit=10&page=${currentPage}&tsym=USD`
+        //   )
+        //   .then(({ data }) => {
+        //     const items: TCoin[] = data.Data.map((obj: any) => {
+        //       return {
+        //         id: obj.CoinInfo.id,
+        //         img: `https://www.cryptocompare.com${obj.CoinInfo.ImageUrl}`,
+        //         fullName: obj.CoinInfo.FullName,
+        //         name: obj.CoinInfo.Name,
+        //         price: obj.DISPLAY ? obj.DISPLAY.USD.PRICE : "??",
+        //         volume24hour: obj.DISPLAY ? obj.DISPLAY.USD.VOLUME24HOUR : "??",
+        //         marketCap: obj.DISPLAY ? obj.DISPLAY.USD.MKTCAP : "??",
+        //         changeHour: obj.DISPLAY ? obj.DISPLAY.USD.CHANGEPCTHOUR : "??",
+        //         change24hour: obj.DISPLAY
+        //           ? obj.DISPLAY.USD.CHANGEPCT24HOUR
+        //           : "??",
+        //       };
+        //     });
+        //     console.log('конец');
+        //     // @ts-ignore
+        //     setCoins([...coins, ...items]);
+        //     setCurrentPage((prevState) => prevState + 1);
+        //   })
+        //   .finally(() => setFetching(false));
+      } else if (isUpdate) {
+        console.log("isUpdate");
+        dispatch(clearCoins());
+        setCurrentPage(1);
+        dispatch(fetchCoins({ currentPage: 0, currency }));
       }
-      // dispatch(fetchCoins(currentPage));
     } catch (error) {
       alert("Ошибка!");
-      console.log(error, "Ошибка при получении ...");
+      console.log(error, "Ошибка при получении валют...");
+    } finally {
+      setIsUpdate(false);
     }
-  }, [fetching]);
+  }, [isFetching, currency]);
 
   const scrollHandler = (e: any) => {
     if (
@@ -79,7 +102,9 @@ export const TableCoins: React.FC<TableProps> = () => {
         100 &&
       coins.length !== 100
     ) {
-      setFetching(true);
+      console.log("gg");
+      // setFetching(true)
+      dispatch(setFetching(true));
     }
   };
 
@@ -90,9 +115,30 @@ export const TableCoins: React.FC<TableProps> = () => {
     };
   }, []);
 
+  const selectCurrency = (value: string) => {
+    setCurrency(value);
+    setIsUpdate(true);
+  };
+
   return (
-    <TableContainer className={ss.table}>
-      <div className="container">
+    <div className="container">
+      <div className={ss.select}>
+        <FormControl variant="filled">
+          <Select
+            className={ss.list}
+            id="demo-simple-select"
+            value={currency}
+            onChange={(e) => selectCurrency(e.target.value)}
+          >
+            {currencies.map((label, index) => (
+              <MenuItem key={index} value={label}>
+                {label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
+      <TableContainer className={ss.table}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead className={ss.head}>
             <TableRow>
@@ -104,12 +150,12 @@ export const TableCoins: React.FC<TableProps> = () => {
             </TableRow>
           </TableHead>
           <TableBody className={ss.body}>
-            {coins.map((obj: TCoin) => (
-              <TableItem key={`${obj.name}_${obj.id}`} {...obj} />
+            {coins.map((obj: TCoin, index) => (
+              <TableItem key={`${obj.name}_${index}`} {...obj} />
             ))}
           </TableBody>
         </Table>
-      </div>
-    </TableContainer>
+      </TableContainer>
+    </div>
   );
 };
