@@ -14,24 +14,99 @@ import {
 import ss from "./Conventor.module.scss";
 import { coinsSliceSelector } from "../../redux/coins/selectors";
 import { currencies, TCoin } from "../../redux/coins/types";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCoinPrice } from "../../redux/coinPrice/slice";
+import { coinPriceSliceSelector } from "../../redux/coinPrice/selectors";
 
 type ConventorProps = {};
 
 export const Conventor: React.FC<ConventorProps> = () => {
+  const dispatch = useDispatch();
   const { items } = useSelector(coinsSliceSelector);
+  const { coinPrice } = useSelector(coinPriceSliceSelector);
 
-  const [fromCoin, setFromCoin] = React.useState(
-    items[0] ? `${items[0].fullName} (${items[0].name})` : ""
-  );
+  // const [fromCoin, setFromCoin] = React.useState(
+  //   items[0] ? `${items[0].fullName} (${items[0].name})` : ""
+  // );
+  const [fromCoin, setFromCoin] = React.useState("Bitcoin (BTC)");
   const [toCoin, setToCoin] = React.useState(
-    items[0] ? `${items[0].fullName} (${items[0].name})` : ""
+    currencies[0] ? `${currencies[0].fullName} (${currencies[0].name})` : ""
   );
   const [value, setValue] = React.useState(1);
+  const [result, setResult] = React.useState(0);
+
+  // @ts-ignore
+  const toCoinName = toCoin && toCoin.match(/\((.*)\)/).pop();
+  // @ts-ignore
+  const fromCoinName = fromCoin && fromCoin.match(/\((.*)\)/).pop();
+  console.log("fromCoinName", fromCoinName);
+
+  console.log(coinPrice);
+
+  const inPrice =
+    (items &&
+      items.find((obj) => `${obj.fullName} (${obj.name})` === fromCoin)
+        ?.priceCalc) ||
+    0;
+
+  const outPrice =
+    (items &&
+      items.find((obj) => `${obj.fullName} (${obj.name})` === toCoin)
+        ?.priceCalc) ||
+    0;
+
+  // const outPrice = currencies.find((obj) => obj.name === toCoinName)?.name;
+
+  // @ts-ignore`
+  const outPrice2 = coinPrice[outPrice];
+
+  console.log("outPrice", outPrice);
+  console.log("outPrice2", outPrice2);
 
   const reverseSelects = () => {
     setFromCoin(toCoin);
     setToCoin(fromCoin);
+  };
+
+  const isCurrency1 = currencies.find((obj) => obj.name === fromCoinName);
+  const isCurrency2 = currencies.find((obj) => obj.name === toCoinName);
+  // @ts-ignore
+  // console.log("isCurrency", coinPrice[isCurrency?.name]);
+
+  React.useEffect(() => {
+    try {
+      if (isCurrency2) {
+        // @ts-ignore
+        dispatch(fetchCoinPrice(fromCoinName));
+        // @ts-ignore
+        setResult((value * coinPrice[isCurrency2?.name]).toFixed(2));
+      } else if (isCurrency1) {
+        // @ts-ignore
+        dispatch(fetchCoinPrice(toCoinName));
+        // @ts-ignore
+        setResult((value / coinPrice[isCurrency1?.name]).toFixed(6));
+      } else {
+        // @ts-ignore
+        setResult(((value * Number(inPrice)) / Number(outPrice)).toFixed(2));
+      }
+      // currencies.map((obj) => {
+      //   if (obj.name === toCoinName) {
+      //     console.log("find");
+      //     // @ts-ignore
+      //     dispatch(fetchCoinPrice(fromCoinName));
+      //   }
+      // });
+      // if (isFetching) {
+      // dispatch(fetchCoinPrice(coinName));
+      // }
+    } catch (error) {
+      alert("Ошибка!");
+      console.log(error, "Ошибка при получении цены валюты...");
+    }
+  }, [fromCoin, toCoin, value]);
+
+  const onChangeInput = (value: any) => {
+    setValue(value);
   };
 
   return (
@@ -43,7 +118,7 @@ export const Conventor: React.FC<ConventorProps> = () => {
 
         <TextField
           value={value}
-          onChange={(e: any) => setValue(e.target.value)}
+          onChange={(e: any) => onChangeInput(e.target.value)}
           className={ss.input}
           type="number"
           id="outlined-basic"
@@ -132,7 +207,7 @@ export const Conventor: React.FC<ConventorProps> = () => {
           </Grid>
         </Grid>
         <Typography className={ss.result} align="center" variant="h5">
-          {value} {fromCoin} = 20,272.77 {toCoin}
+          {value} {fromCoin} = {result} {toCoin}
         </Typography>
       </div>
     </div>

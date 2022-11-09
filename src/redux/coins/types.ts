@@ -4,6 +4,7 @@ export type TCoin = {
   fullName: string;
   name: string;
   price: string;
+  priceCalc: number;
   volume24hour: string;
   marketCap: string;
   changeHour: string;
@@ -19,6 +20,7 @@ export interface TCoinsSlice {
   status: CoinStatus;
   items: TCoin[];
   isFetching: boolean;
+  isLoading: boolean;
 }
 
 export enum CoinStatus {

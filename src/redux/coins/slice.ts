@@ -17,6 +17,7 @@ export const fetchCoins = createAsyncThunk<TCoin[], TFetchParams>(
         fullName: obj.CoinInfo.FullName,
         name: obj.CoinInfo.Name,
         price: obj.DISPLAY ? obj.DISPLAY[currency].PRICE : "??",
+        priceCalc: obj.RAW ? obj.RAW[currency].PRICE : "??",
         volume24hour: obj.DISPLAY ? obj.DISPLAY[currency].VOLUME24HOUR : "??",
         marketCap: obj.DISPLAY ? obj.DISPLAY[currency].MKTCAP : "??",
         changeHour: obj.DISPLAY ? obj.DISPLAY[currency].CHANGEPCTHOUR : "??",
@@ -34,6 +35,7 @@ const initialState: TCoinsSlice = {
   status: CoinStatus.LOADING,
   items: [],
   isFetching: true,
+  isLoading: true,
 };
 
 const coinSlice = createSlice({
@@ -55,6 +57,7 @@ const coinSlice = createSlice({
       state.status = CoinStatus.SUCCESS;
       state.items = [...state.items, ...payload];
       state.isFetching = false;
+      state.isLoading = false;
     });
     builder.addCase(fetchCoins.rejected, (state) => {
       state.status = CoinStatus.ERROR;

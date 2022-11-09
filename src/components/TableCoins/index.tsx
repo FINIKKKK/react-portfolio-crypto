@@ -22,6 +22,7 @@ import { TableItem } from "../TableItem";
 import { fetchCoins, clearCoins } from "../../redux/coins/slice";
 import { useAppDispatch } from "../../redux/store";
 import axios from "axios";
+import { LoadingItem } from "../LoadingItem";
 
 type TableProps = {};
 
@@ -36,7 +37,7 @@ const tableLabels = [
 
 export const TableCoins: React.FC<TableProps> = () => {
   const dispatch = useAppDispatch();
-  const { items: coins, isFetching } = useSelector(coinsSliceSelector);
+  const { items: coins, isFetching, isLoading } = useSelector(coinsSliceSelector);
 
   const [currentPage, setCurrentPage] = React.useState(0);
   const [isUpdate, setIsUpdate] = React.useState(false);
@@ -112,11 +113,17 @@ export const TableCoins: React.FC<TableProps> = () => {
               ))}
             </TableRow>
           </TableHead>
-          <TableBody className={ss.body}>
-            {coins.map((obj: TCoin, index) => (
-              <TableItem key={`${obj.name}_${index}`} {...obj} />
-            ))}
-          </TableBody>
+          {!isLoading ? (
+            <TableBody className={ss.body}>
+              {coins.map((obj: TCoin, index) => (
+                <TableItem key={`${obj.name}_${index}`} {...obj} />
+              ))}
+            </TableBody>
+          ) : (
+            Array(10)
+              .fill(0)
+              .map((_, index) => <LoadingItem key={index} />)
+          )}
         </Table>
       </TableContainer>
     </div>

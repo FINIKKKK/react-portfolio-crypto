@@ -1,0 +1,29 @@
+@import '../../scss/variables';
+
+.item {
+  position: relative;
+  background-color: $main;
+  width: 100%;
+  height: 77px;
+  border-radius: 15px;
+  overflow: hidden !important;
+  display: block;
+  td {
+    border: solid 1px $main2;
+    border-style: solid none;
+    background-color: $main2;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 20px;
+  }
+  td:first-child {
+    border-left-style: solid;
+    border-top-left-radius: 11px;
+    border-bottom-left-radius: 11px;
+  }
+  td:last-child {
+    border-right-style: solid;
+    border-bottom-right-radius: 11px;
+    border-top-right-radius: 11px;
+  }
+}
