@@ -37,7 +37,11 @@ const tableLabels = [
 
 export const TableCoins: React.FC<TableProps> = () => {
   const dispatch = useAppDispatch();
-  const { items: coins, isFetching, isLoading } = useSelector(coinsSliceSelector);
+  const {
+    items: coins,
+    isFetching,
+    isLoading,
+  } = useSelector(coinsSliceSelector);
 
   const [currentPage, setCurrentPage] = React.useState(0);
   const [isUpdate, setIsUpdate] = React.useState(false);
@@ -61,12 +65,14 @@ export const TableCoins: React.FC<TableProps> = () => {
     }
   }, [isFetching, currency]);
 
+  const totalCount = 30;
+
   const scrollHandler = (e: any) => {
     if (
       e.target.documentElement.scrollHeight -
         (e.target.documentElement.scrollTop + window.innerHeight) <
         100 &&
-      coins.length !== 100
+      coins.length < totalCount
     ) {
       dispatch(setFetching(true));
     }
@@ -113,17 +119,15 @@ export const TableCoins: React.FC<TableProps> = () => {
               ))}
             </TableRow>
           </TableHead>
-          {!isLoading ? (
-            <TableBody className={ss.body}>
-              {coins.map((obj: TCoin, index) => (
-                <TableItem key={`${obj.name}_${index}`} {...obj} />
-              ))}
-            </TableBody>
-          ) : (
-            Array(10)
-              .fill(0)
-              .map((_, index) => <LoadingItem key={index} />)
-          )}
+          <TableBody className={ss.body}>
+            {!isLoading
+              ? coins.map((obj: TCoin, index) => (
+                  <TableItem key={`${obj.name}_${index}`} {...obj} />
+                ))
+              : Array(10)
+                  .fill(0)
+                  .map((_, index) => <LoadingItem key={index} />)}
+          </TableBody>
         </Table>
       </TableContainer>
     </div>

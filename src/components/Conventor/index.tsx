@@ -17,21 +17,28 @@ import { currencies, TCoin } from "../../redux/coins/types";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCoinPrice } from "../../redux/coinPrice/slice";
 import { coinPriceSliceSelector } from "../../redux/coinPrice/selectors";
+import axios from "axios";
 
 type ConventorProps = {};
 
+export type TCoinPrice = {
+  [key: string]: number;
+};
+
 export const Conventor: React.FC<ConventorProps> = () => {
   const dispatch = useDispatch();
-  const { items } = useSelector(coinsSliceSelector);
-  const { coinPrice } = useSelector(coinPriceSliceSelector);
+  const { items, isLoading, status } = useSelector(coinsSliceSelector);
+  // const { coinPrice } = useSelector(coinPriceSliceSelector);
+
+  const [coinPrice, setCoinPrice] = React.useState<TCoinPrice>({});
+
+  const coins = items.slice(0, 10);
 
   // const [fromCoin, setFromCoin] = React.useState(
-  //   items[0] ? `${items[0].fullName} (${items[0].name})` : ""
+  //   coins[0] ? `${coins[0].fullName} (${coins[0].name})` : ""
   // );
-  const [fromCoin, setFromCoin] = React.useState("Bitcoin (BTC)");
-  const [toCoin, setToCoin] = React.useState(
-    currencies[0] ? `${currencies[0].fullName} (${currencies[0].name})` : ""
-  );
+  const [fromCoin, setFromCoin] = React.useState("");
+  const [toCoin, setToCoin] = React.useState("");
   const [value, setValue] = React.useState(1);
   const [result, setResult] = React.useState(0);
 
@@ -39,19 +46,19 @@ export const Conventor: React.FC<ConventorProps> = () => {
   const toCoinName = toCoin && toCoin.match(/\((.*)\)/).pop();
   // @ts-ignore
   const fromCoinName = fromCoin && fromCoin.match(/\((.*)\)/).pop();
-  console.log("fromCoinName", fromCoinName);
+  // console.log("fromCoinName", fromCoinName);
 
-  console.log(coinPrice);
+  // console.log(coinPrice);
 
   const inPrice =
-    (items &&
-      items.find((obj) => `${obj.fullName} (${obj.name})` === fromCoin)
+    (coins &&
+      coins.find((obj) => `${obj.fullName} (${obj.name})` === fromCoin)
         ?.priceCalc) ||
     0;
 
   const outPrice =
-    (items &&
-      items.find((obj) => `${obj.fullName} (${obj.name})` === toCoin)
+    (coins &&
+      coins.find((obj) => `${obj.fullName} (${obj.name})` === toCoin)
         ?.priceCalc) ||
     0;
 
@@ -60,8 +67,8 @@ export const Conventor: React.FC<ConventorProps> = () => {
   // @ts-ignore`
   const outPrice2 = coinPrice[outPrice];
 
-  console.log("outPrice", outPrice);
-  console.log("outPrice2", outPrice2);
+  // console.log("outPrice", outPrice);
+  // console.log("outPrice2", outPrice2);
 
   const reverseSelects = () => {
     setFromCoin(toCoin);
@@ -70,40 +77,109 @@ export const Conventor: React.FC<ConventorProps> = () => {
 
   const isCurrency1 = currencies.find((obj) => obj.name === fromCoinName);
   const isCurrency2 = currencies.find((obj) => obj.name === toCoinName);
+  // console.log('isCurrency1', isCurrency1);
   // @ts-ignore
   // console.log("isCurrency", coinPrice[isCurrency?.name]);
 
+  console.log(isLoading);
+  console.log(status);
+
+  async function GetPosts() {
+    const { data } = await axios.get(
+      "https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD,RUB,EUR"
+    );
+    return data;
+  }
+
+  // React.useEffect(() => {
+  //   if (status === "success") {
+  //     setFromCoin(coins[0] ? `${coins[0].fullName} (${coins[0].name})` : "");
+  //     setToCoin(
+  //       currencies[0] ? `${currencies[0].fullName} (${currencies[0].name})` : ""
+  //     );
+  //     // console.log(fromCoinName);
+
+  //     // axios
+  //     //   .get(
+  //     //     `https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD,RUB,EUR`
+  //     //   )
+  //     //   // @ts-ignore
+  //     //   .then((resp) => {
+  //     //     setCoinPrice(resp.data);
+  //     //     console.log(coinPrice);
+  //     //     // @ts-ignore
+  //     //     setResult((value * coinPrice[isCurrency2?.name]).toFixed(2));
+  //     //   });
+
+  //     const fetch = async () => {
+  //       (async () => {
+  //         const response = await GetPosts();
+  //         console.log(response);
+  //         setCoinPrice({ gg: 244 });
+  //         console.log("coinPrice", coinPrice);
+
+  //         // setTimeout(() => {
+  //         // }, 5000);
+
+  //         // @ts-ignore
+  //         // setResult((value * coinPrice[isCurrency2?.name]).toFixed(2));
+  //       })();
+  //       // const { data } = await axios.get(
+  //       //   `https://min-api.cryptocompare.com/data/price?fsym=BTC&tsyms=USD,RUB,EUR`
+  //       // );
+  //       // setCoinPrice(data);
+  //       // console.log(coinPrice);
+  //     };
+  //     fetch();
+  //   }
+  // }, [isLoading]);
+
   React.useEffect(() => {
-    try {
-      if (isCurrency2) {
-        // @ts-ignore
-        dispatch(fetchCoinPrice(fromCoinName));
-        // @ts-ignore
-        setResult((value * coinPrice[isCurrency2?.name]).toFixed(2));
-      } else if (isCurrency1) {
-        // @ts-ignore
-        dispatch(fetchCoinPrice(toCoinName));
-        // @ts-ignore
-        setResult((value / coinPrice[isCurrency1?.name]).toFixed(6));
-      } else {
-        // @ts-ignore
-        setResult(((value * Number(inPrice)) / Number(outPrice)).toFixed(2));
-      }
-      // currencies.map((obj) => {
-      //   if (obj.name === toCoinName) {
-      //     console.log("find");
-      //     // @ts-ignore
-      //     dispatch(fetchCoinPrice(fromCoinName));
-      //   }
-      // });
-      // if (isFetching) {
-      // dispatch(fetchCoinPrice(coinName));
-      // }
-    } catch (error) {
-      alert("Ошибка!");
-      console.log(error, "Ошибка при получении цены валюты...");
-    }
-  }, [fromCoin, toCoin, value]);
+    (async () => {
+      setFromCoin(coins[0] ? `${coins[0].fullName} (${coins[0].name})` : "");
+      setToCoin(
+        currencies[0] ? `${currencies[0].fullName} (${currencies[0].name})` : ""
+      );
+      const response = await GetPosts();
+      console.log(response);
+      setCoinPrice(response);
+      console.log("coinPrice", coinPrice);
+      // @ts-ignore
+      setResult((value * coinPrice[isCurrency2?.name]).toFixed(2));
+    })();
+  }, [isLoading]);
+
+  // React.useEffect(() => {
+  //   try {
+  //     if (isCurrency2) {
+  //       // @ts-ignore
+  //       // dispatch(fetchCoinPrice(fromCoinName));
+  //       // @ts-ignore
+  //       // setResult((value * coinPrice[isCurrency2?.name]).toFixed(2));
+  //     } else if (isCurrency1) {
+  //       // @ts-ignore
+  //       // dispatch(fetchCoinPrice(toCoinName));
+  //       // @ts-ignore
+  //       // setResult((value / coinPrice[isCurrency1?.name]).toFixed(6));
+  //     } else {
+  //       // @ts-ignore
+  //       setResult(((value * Number(inPrice)) / Number(outPrice)).toFixed(2));
+  //     }
+  //     // currencies.map((obj) => {
+  //     //   if (obj.name === toCoinName) {
+  //     //     console.log("find");
+  //     //     // @ts-ignore
+  //     //     dispatch(fetchCoinPrice(fromCoinName));
+  //     //   }
+  //     // });
+  //     // if (isFetching) {
+  //     // dispatch(fetchCoinPrice(coinName));
+  //     // }
+  //   } catch (error) {
+  //     alert("Ошибка!");
+  //     console.log(error, "Ошибка при получении цены валюты...");
+  //   }
+  // }, [fromCoin, toCoin, value]);
 
   const onChangeInput = (value: any) => {
     setValue(value);
@@ -142,7 +218,7 @@ export const Conventor: React.FC<ConventorProps> = () => {
                   </MenuItem>
                 ))}
                 <ListSubheader></ListSubheader>
-                {items.map((obj: TCoin) => (
+                {coins.map((obj: TCoin) => (
                   <MenuItem
                     key={`${obj.name}_${obj.id}`}
                     value={`${obj.fullName} (${obj.name})`}
@@ -194,7 +270,7 @@ export const Conventor: React.FC<ConventorProps> = () => {
                   </MenuItem>
                 ))}
                 <ListSubheader></ListSubheader>
-                {items.map((obj: TCoin) => (
+                {coins.map((obj: TCoin) => (
                   <MenuItem
                     key={`${obj.name}_${obj.id}`}
                     value={`${obj.fullName} (${obj.name})`}
